@@ -3,7 +3,7 @@
         "MyLaunchTemplate": {
             "Type": "AWS::EC2::LaunchTemplate",
             "Properties": {
-                "LaunchTemplateName": "MyLaunchTemplate",
+                "LaunchTemplateName": "CapacityOptLaunchTemp",
                 "LaunchTemplateData": {
                     "ImageId": "ami-09d3b3274b6c5d4aa",
                     "InstanceType": "t2.micro",
@@ -16,7 +16,7 @@
         "myASG": {
             "Type": "AWS::AutoScaling::AutoScalingGroup",
             "Properties": {
-                "AutoScalingGroupName": "runningAmazonEC2WorkloadsAtScale",
+                "AutoScalingGroupName": "CapacityOptLaunchTempASG",
                 "MixedInstancesPolicy": {
                     "LaunchTemplate": {
                         "LaunchTemplateSpecification": {
@@ -32,13 +32,13 @@
                         },
                         "Overrides": [
                             {
-                                "InstanceType": "c3.large"
+                                "InstanceType": "t2.small"
                             },
                             {
-                                "InstanceType": "c4.large"
+                                "InstanceType": "t2.medium"
                             },
                             {
-                                "InstanceType": "c5.large"
+                                "InstanceType": "t2.nano"
                             }
                         ]
                     },
