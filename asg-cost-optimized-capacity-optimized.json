@@ -1,0 +1,65 @@
+{
+    "Resources": {
+        "MyLaunchTemplate": {
+            "Type": "AWS::EC2::LaunchTemplate",
+            "Properties": {
+                "LaunchTemplateName": "MyLaunchTemplate",
+                "LaunchTemplateData": {
+                    "ImageId": "ami-09d3b3274b6c5d4aa",
+                    "InstanceType": "t2.micro",
+                    "SecurityGroupIds": [
+                        "sg-059acd2f4de300790"
+                    ]
+                }
+            }
+        },
+        "myASG": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AutoScalingGroupName": "runningAmazonEC2WorkloadsAtScale",
+                "MixedInstancesPolicy": {
+                    "LaunchTemplate": {
+                        "LaunchTemplateSpecification": {
+                            "LaunchTemplateId": {
+                                "Ref": "MyLaunchTemplate"
+                            },
+                            "Version": {
+                                "Fn::GetAtt": [
+                                    "MyLaunchTemplate",
+                                    "LatestVersionNumber"
+                                ]
+                            }
+                        },
+                        "Overrides": [
+                            {
+                                "InstanceType": "c3.large"
+                            },
+                            {
+                                "InstanceType": "c4.large"
+                            },
+                            {
+                                "InstanceType": "c5.large"
+                            }
+                        ]
+                    },
+                    "InstancesDistribution": {                        
+                        "OnDemandPercentageAboveBaseCapacity": 0,
+                        "SpotAllocationStrategy": "capacity-optimized"
+                    }
+                },
+                "MinSize": "4",
+                "MaxSize": "10",
+                "DesiredCapacity": "6",
+                "HealthCheckType": "EC2",
+                "VPCZoneIdentifier": [
+                    "subnet-081a7626",
+                    "subnet-06873238",
+                    "subnet-29583a75",
+                    "subnet-af3405e5",
+                    "subnet-cb114ac4",
+                    "subnet-bb3b5adc"
+                ]
+            }
+        }
+    }
+}
